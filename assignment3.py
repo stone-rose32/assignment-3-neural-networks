@@ -237,3 +237,32 @@ for t in range(epochs):
     train_loop(train_dataloader, model, loss_fn, optimizer)
     test_loop(test_dataloader, model, loss_fn)
 print("Done!")
+
+# Specify our path
+PATH = "model.pt"
+
+# Create a new "blank" model to load our information into
+model = FirstNet()
+
+# Recreate our optimizer
+optimizer = torch.optim.SGD(model.parameters(), lr=0.001, momentum=0.9)
+
+# Load back all of our data from the file
+checkpoint = torch.load(PATH)
+model.load_state_dict(checkpoint['model_state_dict'])
+optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
+EPOCH = checkpoint['epoch']
+
+# Save our model for later, so we can train more or make predictions
+
+EPOCH = epochs
+# We use the .pt file extension by convention for saving
+#    pytorch models
+PATH = "model.pt"
+
+# The save function creates a binary storing all our data for us
+torch.save({
+            'epoch': EPOCH,
+            'model_state_dict': model.state_dict(),
+            'optimizer_state_dict': optimizer.state_dict(),
+            }, PATH)
